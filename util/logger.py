@@ -35,7 +35,6 @@ class Logger():
     def __del__(self):
         self.logger.close()
 
-    # register values for each epoch, such as loss, PSNR etc.
     def register(self, name, epoch, value):
         if name in self.register_dict:
             self.register_dict[name][epoch] = value
@@ -50,7 +49,6 @@ class Logger():
             self.register_dict[name]["min"] = value
 
     def report(self, items, state, epoch):
-        # items - [["MSE", "min"], ["PSNR", "max"] ... ]
         msg = "[{}] ".format(state.lower())
         state = "_" + state.lower()
         for i in range(len(items)):

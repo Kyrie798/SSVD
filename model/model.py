@@ -1,4 +1,4 @@
-from model.ESTRNN import ESTRNN, feed, cost_profile
+from model.ESTRNN import ESTRNN, feed
 import torch.nn as nn
 
 
@@ -11,9 +11,3 @@ class Model(nn.Module):
     def forward(self, iter_samples):
         outputs = feed(self.model, iter_samples)
         return outputs
-
-    def profile(self):
-        H, W = 720, 1280
-        seq_length = 2 + 2 + 1
-        flops, params = cost_profile(self.model, H, W, seq_length)
-        return flops, params

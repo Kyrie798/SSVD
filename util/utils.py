@@ -54,9 +54,6 @@ class Flip(object):
 class ToTensor(object):
     def __call__(self, sample):
         image, label = sample["image"], sample["label"]
-        # swap color axis because
-        # numpy image: H x W x C
-        # torch image: C X H X W
         image = np.ascontiguousarray(image.transpose((2, 0, 1))[np.newaxis, :])
         label = np.ascontiguousarray(label.transpose((2, 0, 1))[np.newaxis, :])
         sample["image"] = torch.from_numpy(image).float()

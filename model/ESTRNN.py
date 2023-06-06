@@ -190,9 +190,7 @@ class ESTRNN(nn.Module):
         self.recons = Reconstructor(para)
         self.fusion = GSA(para)
 
-    def forward(self, x, profile_flag=False):
-        if profile_flag:
-            return self.profile_forward(x)
+    def forward(self, x):
         outputs, hs = [], []
         batch_size, frames, channels, height, width = x.shape
         s_height = int(height / self.ds_ratio)
@@ -208,35 +206,7 @@ class ESTRNN(nn.Module):
             outputs.append(out.unsqueeze(dim=1))
         return torch.cat(outputs, dim=1)
 
-    # For calculating GMACs
-    def profile_forward(self, x):
-        outputs, hs = [], []
-        batch_size, frames, channels, height, width = x.shape
-        s_height = int(height / self.ds_ratio)
-        s_width = int(width / self.ds_ratio)
-        s = torch.zeros(batch_size, self.n_feats, s_height, s_width).to(self.device)
-        for i in range(frames):
-            h, s = self.cell(x[:, i, :, :, :], s)
-            hs.append(h)
-        for i in range(self.num_fb + self.num_ff):
-            hs.append(torch.randn(*h.shape).to(self.device))
-        for i in range(self.num_fb, frames + self.num_fb):
-            out = self.fusion(hs[i - self.num_fb:i + self.num_ff + 1])
-            out = self.recons(out)
-            outputs.append(out.unsqueeze(dim=1))
-
-        return torch.cat(outputs, dim=1)
-
-
 def feed(model, iter_samples):
     inputs = iter_samples[0]
     outputs = model(inputs)
     return outputs
-
-
-def cost_profile(model, H, W, seq_length):
-    x = torch.randn(1, seq_length, 3, H, W).cuda()
-    profile_flag = True
-    flops, params = profile(model, inputs=(x, profile_flag), verbose=False)
-
-    return flops / seq_length, params
