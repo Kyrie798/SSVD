@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from thop import profile
 
 from .arches import conv1x1, conv3x3, conv5x5, actFunc
 
