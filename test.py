@@ -20,7 +20,7 @@ class Tester:
     def test(self):
         logger = Logger()
         model = Model(self.opt).cuda()
-        checkpoint = torch.load("./experiment/2023_06_06_08_58_57/model_best.pth.tar", map_location="cuda:0")
+        checkpoint = torch.load("./experiment/2023_06_09_11_15_15/model_best.pth.tar", map_location="cuda:0")
         model = nn.DataParallel(model)
         model.load_state_dict(checkpoint["state_dict"])
 

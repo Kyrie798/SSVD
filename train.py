@@ -48,7 +48,6 @@ class Trainer:
         # create optimizer
         optimizer = optim.Adam(model.parameters(), lr=5e-4)
         scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=opt.epochs, eta_min=1e-8)
-        lr = optimizer.param_groups[0]["lr"]
 
         # distributed data parallel
         model = nn.DataParallel(model)
@@ -77,6 +76,7 @@ class Trainer:
         for epoch in range(opt.start_epoch, opt.epochs + 1):
             # train
             model.train()
+            lr = optimizer.param_groups[0]["lr"]
             logger("[Epoch [{}/{}] lr {:.2e}]".format(epoch, opt.epochs, lr), prefix="\n")
             losses_meter = {}
             losses_name = ["L1_Charbonnier_loss_color"]
@@ -203,7 +203,7 @@ class Trainer:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--start_epoch", type=int, default=1)
-    parser.add_argument("--epochs", type=int, default=2)
+    parser.add_argument("--epochs", type=int, default=500)
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--resume_file", type=str)
