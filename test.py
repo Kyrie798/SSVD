@@ -20,7 +20,7 @@ class Tester:
     def test(self):
         logger = Logger()
         model = Model(self.opt).cuda()
-        checkpoint = torch.load("./experiment/2023_06_09_11_15_15/model_best.pth.tar", map_location="cuda:0")
+        checkpoint = torch.load("./experiment/2023_06_20_19_58_40/checkpoint.pth.tar", map_location="cuda:0")
         model = nn.DataParallel(model)
         model.load_state_dict(checkpoint["state_dict"])
 
@@ -32,8 +32,8 @@ class Tester:
         B, H, W, C = 1, 540, 960, 3
         blur = os.path.join(opt.data_root, "gopro_ds_valid")
         gt = os.path.join(opt.data_root, "gopro_ds_valid_gt")
-        env_blur = lmdb.open(blur, map_size=100)
-        env_gt = lmdb.open(gt, map_size=100)
+        env_blur = lmdb.open(blur, map_size=10995116277)
+        env_gt = lmdb.open(gt, map_size=10995116277)
         txn_blur = env_blur.begin()
         txn_gt = env_gt.begin()
 
@@ -48,7 +48,7 @@ class Tester:
             save_dir = os.path.join(logger.save_dir, "resluts", seq)
             os.makedirs(save_dir, exist_ok=True)
             start = 0
-            end = 20
+            end = 8
             while (True):
                 input_seq = []
                 label_seq = []

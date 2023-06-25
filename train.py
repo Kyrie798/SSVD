@@ -204,7 +204,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--start_epoch", type=int, default=1)
     parser.add_argument("--epochs", type=int, default=500)
-    parser.add_argument("--batch_size", type=int, default=4)
+    parser.add_argument("--batch_size", type=int, default=1)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--resume_file", type=str)
     parser.add_argument("--data_root", type=str, default="./datasets/gopro_ds_lmdb")
